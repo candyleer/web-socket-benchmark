@@ -21,6 +21,7 @@ fn main() {
         soketto_benchmark::run().await.unwrap();
         tokio_tungstenite_banchmark::run().await.unwrap();
         web_socket_banchmark::run().await.unwrap();
+        sockudo_ws_benchmark::run().await.unwrap();
     });
 }
 
@@ -198,7 +199,7 @@ mod tokio_tungstenite_banchmark {
         let mut ws = WebSocketStream::from_raw_socket(&mut stream, Role::Client, None).await;
         let send = Instant::now();
         for _ in 0..ITER {
-            ws.feed(Message::Text(MSG.to_owned())).await?;
+            ws.feed(Message::Text(MSG.to_owned().into())).await?;
         }
         ws.close(None).await?;
         let send = send.elapsed();
@@ -221,7 +222,7 @@ mod tokio_tungstenite_banchmark {
         let recv = Instant::now();
         for _ in 0..ITER {
             match ws.next().await.unwrap()? {
-                Message::Text(data) => assert_eq!(MSG, data),
+                Message::Text(data) => assert_eq!(data, MSG),
                 _ => unimplemented!(),
             }
         }
@@ -321,6 +322,87 @@ mod web_socket_banchmark {
         println!("web-socket (echo):  {echo:?}");
         println!("web-socket (recv):  {recv:?}");
         println!("web-socket:         {total:?}",);
+        Ok(())
+    }
+}
+
+mod sockudo_ws_benchmark {
+    use super::*;
+
+    use bytes::Bytes;
+    use futures_util::{SinkExt, StreamExt};
+    use sockudo_ws::{
+        protocol::Message, Config, WebSocketStream,
+    };
+
+    type DynErr = Box<dyn std::error::Error + Sync + Send>;
+    type Result<T, E = DynErr> = std::result::Result<T, E>;
+
+    pub async fn run() -> Result<()> {
+        let msg_bytes = Bytes::from_static(MSG.as_bytes());
+        let config = Config {
+            auto_ping: false,
+            idle_timeout: 0,
+            ..Config::default()
+        };
+
+        let mut stream = bench::Stream::new(CAPACITY);
+        let total = Instant::now();
+
+        // ------------------------------------------------
+        stream.role_client();
+
+        let mut ws = WebSocketStream::client(&mut stream, config.clone());
+        let send = Instant::now();
+        for _ in 0..ITER {
+            ws.feed(Message::Text(msg_bytes.clone())).await?;
+        }
+        ws.send(Message::Close(None)).await?;
+        let send = send.elapsed();
+        drop(ws);
+
+        // ------------------------------------------------
+        stream.role_server();
+
+        let mut ws = WebSocketStream::server(&mut stream, config.clone());
+        let echo = Instant::now();
+        while let Some(result) = ws.next().await {
+            match result? {
+                msg @ Message::Text(_) | msg @ Message::Binary(_) => {
+                    ws.feed(msg).await?;
+                }
+                Message::Close(_) => {
+                    SinkExt::flush(&mut ws).await?;
+                    break;
+                }
+                _ => {}
+            }
+        }
+        let echo = echo.elapsed();
+        drop(ws);
+
+        // ------------------------------------------------
+        stream.role_client();
+
+        let mut ws = WebSocketStream::client(&mut stream, config);
+        let recv = Instant::now();
+        for _ in 0..ITER {
+            match ws.next().await.unwrap()? {
+                Message::Text(data) => {
+                    assert_eq!(data.as_ref(), MSG.as_bytes())
+                }
+                _ => unimplemented!(),
+            }
+        }
+        let recv = recv.elapsed();
+
+        // ------------------------------------------------
+        let total = total.elapsed();
+        println!("\n");
+        println!("sockudo-ws (send):  {send:?}");
+        println!("sockudo-ws (echo):  {echo:?}");
+        println!("sockudo-ws (recv):  {recv:?}");
+        println!("sockudo-ws:         {total:?}");
         Ok(())
     }
 }

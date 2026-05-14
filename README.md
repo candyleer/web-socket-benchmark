@@ -13,28 +13,34 @@ cargo r -r
 
 ### Results
 
-#### [Intel® Core™ i9-13900K Processor](https://www.intel.com/content/www/us/en/products/sku/230496/intel-core-i913900k-processor-36m-cache-up-to-5-80-ghz/specifications.html) - [@AurevoirXavier](https://github.com/AurevoirXavier)
+#### AWS Graviton4 4 Core
 ```
-fastwebsockets (send):  3.1261ms
-fastwebsockets (echo):  8.080872ms
-fastwebsockets (recv):  5.525353ms
-fastwebsockets:         16.732845ms
+fastwebsockets (send):  7.857521ms
+fastwebsockets (echo):  18.123787ms
+fastwebsockets (recv):  10.046021ms
+fastwebsockets:         36.032242ms
 
 
-soketto (send):  7.998258ms
-soketto (echo):  18.857447ms
-soketto (recv):  10.228193ms
-soketto:         37.08868ms
+soketto (send):  12.81325ms
+soketto (echo):  36.085508ms
+soketto (recv):  18.214928ms
+soketto:         67.117091ms
 
 
-tokio_tungstenite (send):  7.722288ms
-tokio_tungstenite (echo):  17.284609ms
-tokio_tungstenite (recv):  10.407554ms
-tokio_tungstenite:         35.427836ms
+tokio_tungstenite (send):  11.172872ms
+tokio_tungstenite (echo):  23.055114ms
+tokio_tungstenite (recv):  15.536063ms
+tokio_tungstenite:         49.775165ms
 
 
-web-socket (send):  2.369528ms
-web-socket (echo):  6.243006ms
-web-socket (recv):  3.372092ms
-web-socket:         11.985043ms
+web-socket (send):  4.210412ms
+web-socket (echo):  11.918639ms
+web-socket (recv):  6.013216ms
+web-socket:         22.142436ms
+
+
+sockudo-ws (send):  2.022251ms
+sockudo-ws (echo):  9.086881ms
+sockudo-ws (recv):  6.220709ms
+sockudo-ws:         17.333161ms
 ```

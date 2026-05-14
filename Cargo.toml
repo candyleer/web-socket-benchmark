@@ -1,13 +1,15 @@
 [package]
-edition = "2021"
+edition = "2024"
 name    = "web-socket-benchmark"
 version = "0.1.0"
 
 [dependencies]
+bytes        = "1"
 futures-util = { version = "0.3", default-features = false }
 tokio        = { version = "1", default-features = false }
 
-fastwebsockets    = "0.4"
-soketto           = "*"
-tokio-tungstenite = "*"
+fastwebsockets    = "0.10.0"
+soketto           = "0.8.1"
+tokio-tungstenite = "0.29.0"
 web-socket        = { git = "https://github.com/nurmohammed840/websocket.rs.git", branch = "main" }
+sockudo-ws        = { git = "https://github.com/sockudo/sockudo-ws.git", default-features = false, features = ["tokio-runtime", "fastrand", "simd", "neon"] }
