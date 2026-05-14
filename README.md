@@ -4,6 +4,7 @@
 - [soketto](https://github.com/paritytech/soketto)
 - [tokio-tungstenite](https://github.com/snapview/tokio-tungstenite)
 - [web-socket](https://github.com/nurmohammed840/websocket.rs)
+- [sockudo-ws](https://github.com/sockudo/sockudo-ws)
 
 ### Run benchmark
 
