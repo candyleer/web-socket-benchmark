@@ -13,3 +13,5 @@ soketto           = "0.8.1"
 tokio-tungstenite = "0.29.0"
 web-socket        = { git = "https://github.com/nurmohammed840/websocket.rs.git", branch = "main" }
 sockudo-ws        = { git = "https://github.com/sockudo/sockudo-ws.git", default-features = false, features = ["tokio-runtime", "fastrand", "simd", "neon"] }
+tokio-websockets  = { version = "0.13", default-features = false, features = ["client", "server", "sha1_smol", "fastrand"] }
+wtx               = { version = "0.42", default-features = false, features = ["web-socket", "std", "optimization"] }

@@ -427,6 +427,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "sha1_smol"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bbfa15b3dddfee50a0fff136974b3e1bde555604ba463834a7eb7deb6417705d"
+
+[[package]]
 name = "simdutf8"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -603,6 +609,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "tokio-websockets"
+version = "0.13.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dad543404f98bfc969aeb71994105c592acfc6c43323fddcd016bb208d1c65cb"
+dependencies = [
+ "base64",
+ "bytes",
+ "fastrand",
+ "futures-core",
+ "futures-sink",
+ "http",
+ "httparse",
+ "sha1_smol",
+ "simdutf8",
+ "tokio",
+ "tokio-util",
+]
+
+[[package]]
 name = "tungstenite"
 version = "0.29.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -677,7 +702,9 @@ dependencies = [
  "soketto",
  "tokio",
  "tokio-tungstenite",
+ "tokio-websockets",
  "web-socket",
+ "wtx",
 ]
 
 [[package]]
@@ -773,6 +800,28 @@ name = "wit-bindgen"
 version = "0.57.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1ebf944e87a7c253233ad6766e082e3cd714b5d03812acc24c318f549614536e"
+
+[[package]]
+name = "wtx"
+version = "0.42.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "93a85109ceb99fdde8cac1c0c422f110f299e1ef41c820ce4556592233f33b78"
+dependencies = [
+ "memchr",
+ "simdutf8",
+ "wtx-macros",
+]
+
+[[package]]
+name = "wtx-macros"
+version = "0.6.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "14a2ad6c4d3c171f7a7eac3824afbe67885e2b2eb4a732611d816194a78b5f76"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
 
 [[package]]
 name = "zerocopy"
